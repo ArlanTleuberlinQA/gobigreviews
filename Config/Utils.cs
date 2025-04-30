@@ -86,6 +86,26 @@ namespace Gobigreviews.Config.Utils
             var element = wait.Until(ExpectedConditions.ElementIsVisible(locator));
             return element.GetAttribute("href");
         }
+        public class SoftAssert
+        {
+            private readonly List<Exception> _exceptions = new();
+        public void That(TestDelegate code)
+        {
+            try
+        {
+            code();
+        }
+        catch (Exception ex)
+        {
+            _exceptions.Add(ex);
+        }
+        }
+        public void AssertAll()
+        {
+            if (_exceptions.Any())
+            throw new AggregateException("Soft assert failures:", _exceptions);
+        }
+        }
     }
 }
  
